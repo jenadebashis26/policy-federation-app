@@ -125,9 +125,9 @@ tr:hover td{background:rgba(100,67,216,0.03);}
 .pc-fid{font-family:var(--display);font-size:16px;font-weight:700;color:var(--pri);letter-spacing:0.08em;text-transform:uppercase;}
 .pc-sub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
 .pc-body{padding:0 18px 14px;}
-.ur-header{display:grid;grid-template-columns:1fr 120px 100px 80px;gap:10px;padding:8px 0 6px;border-bottom:1px solid var(--line);}
+.ur-header{display:grid;grid-template-columns:1fr 190px 100px 90px 70px;gap:10px;padding:8px 0 6px;border-bottom:1px solid var(--line);}
 .ur-hd{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
-.ur{display:grid;grid-template-columns:1fr 120px 100px 80px;gap:10px;padding:9px 0;border-bottom:1px solid rgba(20,10,40,0.07);align-items:center;}
+.ur{display:grid;grid-template-columns:1fr 190px 100px 90px 70px;gap:10px;padding:9px 0;border-bottom:1px solid rgba(20,10,40,0.07);align-items:center;}
 .ur:last-of-type{border-bottom:none;}
 .ur-email{font-size:13px;}
 .ur-acl{font-family:var(--mono);font-size:12px;color:var(--pri3);}
@@ -186,8 +186,7 @@ tr:hover td{background:rgba(100,67,216,0.03);}
 .api-status{padding:10px 14px;border-radius:3px;font-family:var(--mono);font-size:11px;background:var(--bg3);border:1px solid var(--line);display:flex;align-items:center;gap:8px;margin-top:8px;}
 
 /* ── Watermark ── */
-.wm-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.wm-prev{background:repeating-linear-gradient(45deg,var(--bg3),var(--bg3) 10px,var(--bg2) 10px,var(--bg2) 20px);border-radius:4px;padding:20px;font-family:var(--mono);font-size:12px;text-align:center;border:1px solid var(--line);color:var(--muted);letter-spacing:.04em;line-height:2;margin-top:10px;}
+.wm-grid{display:grid;grid-template-columns:1fr;gap:16px;max-width:520px;}
 
 /* ── Export ── */
 .exp-box{background:#1a1535;border:1px solid #2a2550;border-radius:3px;padding:16px;font-family:var(--mono);font-size:11px;color:#6dddaa;white-space:pre-wrap;max-height:380px;overflow-y:auto;line-height:1.7;}
@@ -333,38 +332,13 @@ tr:hover td{background:rgba(100,67,216,0.03);}
             <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" id="wm-ital" onchange="wmSync()"> Italic</label>
           </div>
           <div style="margin-bottom:14px"><label class="fl">No-Access Message</label><input class="fi" id="wm-msg" oninput="wmSync()"></div>
-          <div style="padding:12px;background:var(--bg3);border:1px solid var(--line);border-radius:3px;margin-top:4px">
-            <div class="fl" style="margin-bottom:8px">Global Offline Access Default</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px">Per-user offline settings override this global default</div>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <div class="toggle"><input type="checkbox" id="wm-offline" checked onchange="wmSync()"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
-              <span style="font-size:12px;color:var(--text)">Offline access enabled globally</span>
-            </label>
-          </div>
-        </div>
-        <div class="cfg-card" style="margin:0">
-          <div class="fl">Watermark preview</div>
-          <div class="wm-prev" id="wm-prev">$USERNAME$ $USEREMAIL$<br>LAM Confidential</div>
-          <div style="margin-top:20px">
-            <div class="fl">Document simulation</div>
-            <div style="background:#fff;border-radius:3px;height:160px;position:relative;overflow:hidden;border:1px solid var(--line2)">
-              <div style="padding:14px">
-                <div style="height:7px;background:#ddd;border-radius:2px;margin-bottom:7px;width:75%"></div>
-                <div style="height:5px;background:#eee;border-radius:2px;margin-bottom:5px;width:90%"></div>
-                <div style="height:5px;background:#eee;border-radius:2px;margin-bottom:5px;width:85%"></div>
-              </div>
-              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:rotate(-28deg);pointer-events:none">
-                <div id="wm-doc" style="font-size:11px;text-align:center;line-height:1.7;opacity:0.18;color:#888"></div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
 
     <!-- LIVE MONITOR -->
     <div class="panel" id="panel-monitor">
-      <div class="ph"><div><div class="ph-title">Live Monitor</div><div class="ph-sub">Refresh Every 10s · Click Row to View XML</div></div></div>
+      <div class="ph"><div><div class="ph-title">Live Monitor</div><div class="ph-sub">Polls this app's /api/log every 10s · Click Row to View XML</div></div></div>
       <div class="mon-wrap">
         <div class="mon-head">
           <div class="dot off" id="mon-dot"></div>
@@ -494,12 +468,15 @@ function renderPols() {
           '<div class="ur-hd">Email</div>' +
           '<div class="ur-hd">DRM Permission</div>' +
           '<div class="ur-hd">Offline Access</div>' +
+          '<div class="ur-hd">Offline Days</div>' +
           '<div class="ur-hd">Action</div>' +
         '</div>' +
         '<div id="ur-'+fid+'"></div>' +
         '<div class="add-row">' +
           '<input placeholder="user@domain.com" id="ne-'+fid+'">' +
-          '<input placeholder="Permission (e.g. 518)" id="na-'+fid+'" style="flex:0 0 130px">' +
+          '<input type="hidden" id="na-'+fid+'" value="2">' +
+          '<button type="button" class="perm-btn" id="nab-'+fid+'" style="flex:0 0 190px;display:flex;align-items:center;justify-content:space-between;" onclick="pickPerm(\'na-'+fid+'\',\'nab-'+fid+'\')"><span>2 · View</span><span style="opacity:.6">&#8862;</span></button>' +
+          '<input type="number" min="0" placeholder="Days ∞" id="nd-'+fid+'" style="flex:0 0 90px;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:7px 6px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;text-align:center;">' +
           '<div class="add-row-offline">' +
             '<div class="toggle"><input type="checkbox" id="no-'+fid+'" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></div>' +
             'Offline' +
@@ -535,29 +512,23 @@ function renderUsers(fid) {
       emailDiv.className = 'ur-email';
       emailDiv.textContent = em;
 
-      // DRM Permission input + calculator button
+      // DRM Permission — single picker button, no free-text entry. Values are
+      // fixed compositions of named rights, so the calculator is the only way in.
       var permDiv = document.createElement('div');
-      permDiv.style.cssText = 'display:flex;align-items:center;gap:6px;';
-      var permInput = document.createElement('input');
-      permInput.type = 'number';
-      permInput.min = '0';
-      permInput.value = entry.acl;
-      permInput.title = drmDescribe(entry.acl);
-      permInput.style.cssText = 'width:80px;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:4px 8px;color:var(--pri3);font-family:var(--mono);font-size:12px;outline:none;-moz-appearance:textfield;';
-      permInput.addEventListener('change', function() {
-        updateAcl(f, em, this.value);
-        this.title = drmDescribe(parseInt(this.value)||0);
+      var permBtn = document.createElement('button');
+      permBtn.type = 'button';
+      permBtn.className = 'perm-btn';
+      permBtn.title = 'Open DRM Rights Calculator';
+      permBtn.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:5px 10px;color:var(--pri3);font-family:var(--mono);font-size:12px;cursor:pointer;';
+      permBtn.innerHTML = '<span>'+entry.acl+' · '+drmDescribe(entry.acl)+'</span><span style="opacity:.6">&#8862;</span>';
+      permBtn.addEventListener('click', function() {
+        openDrmCalc(getAcl(f, em).acl, function(newVal) {
+          updateAcl(f, em, newVal);
+          renderUsers(f);
+          toast('DRM permission updated to ' + newVal + ' (' + drmDescribe(newVal) + ')','ok');
+        });
       });
-      permInput.addEventListener('focus', function() { this.style.borderColor = 'var(--pri)'; });
-      permInput.addEventListener('blur',  function() { this.style.borderColor = 'var(--line2)'; });
-      var calcBtn = document.createElement('button');
-      calcBtn.className = 'perm-btn';
-      calcBtn.title = 'DRM Rights Calculator';
-      calcBtn.innerHTML = '&#8862;';
-      calcBtn.style.cssText = 'padding:3px 7px;font-size:14px;';
-      calcBtn.addEventListener('click', function() { openDrmCalc(f, em, permInput); });
-      permDiv.appendChild(permInput);
-      permDiv.appendChild(calcBtn);
+      permDiv.appendChild(permBtn);
 
       // Offline toggle — built with DOM to avoid innerHTML quote/event issues
       var offDiv = document.createElement('div');
@@ -588,6 +559,25 @@ function renderUsers(fid) {
       offDiv.appendChild(toggleWrap);
       offDiv.appendChild(lbl);
 
+      // Offline duration (date-embargo end-time) — days from now; blank = unlimited
+      var daysDiv = document.createElement('div');
+      var daysInput = document.createElement('input');
+      daysInput.type = 'number';
+      daysInput.min = '0';
+      daysInput.placeholder = '∞';
+      daysInput.title = 'Days of offline access before it expires (blank = unlimited)';
+      daysInput.value = (entry.offlineDays !== undefined && entry.offlineDays !== null) ? entry.offlineDays : '';
+      daysInput.style.cssText = 'width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:5px 6px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;text-align:center;';
+      daysInput.addEventListener('change', function() {
+        if (typeof S.policies[f][em] !== 'object') {
+          S.policies[f][em] = { acl: parseInt(S.policies[f][em])||0, offline: false };
+        }
+        var v = this.value.trim();
+        if (v === '') delete S.policies[f][em].offlineDays;
+        else S.policies[f][em].offlineDays = parseInt(v)||0;
+      });
+      daysDiv.appendChild(daysInput);
+
       // Delete button
       var actDiv = document.createElement('div');
       var delBtn = document.createElement('button');
@@ -600,6 +590,7 @@ function renderUsers(fid) {
       row.appendChild(emailDiv);
       row.appendChild(permDiv);
       row.appendChild(offDiv);
+      row.appendChild(daysDiv);
       row.appendChild(actDiv);
       el.appendChild(row);
     })(fid, email);
@@ -632,14 +623,19 @@ function updateAcl(fid, email, val) {
 
 function addUser(fid) {
   var em = document.getElementById('ne-'+fid).value.trim().toLowerCase();
-  var av = parseInt(document.getElementById('na-'+fid).value.trim());
+  var av = parseInt(document.getElementById('na-'+fid).value) || 0;
   var offline = document.getElementById('no-'+fid).checked;
+  var daysRaw = document.getElementById('nd-'+fid).value.trim();
   if (!em.includes('@')) return toast('Enter a valid email','warn');
-  if (isNaN(av)) return toast('Enter a numeric ACL value','warn');
-  S.policies[fid][em] = { acl: av, offline: offline };
+  var entry = { acl: av, offline: offline };
+  if (daysRaw !== '') entry.offlineDays = parseInt(daysRaw)||0;
+  S.policies[fid][em] = entry;
   document.getElementById('ne-'+fid).value='';
-  document.getElementById('na-'+fid).value='';
+  document.getElementById('na-'+fid).value='2';
+  document.getElementById('nd-'+fid).value='';
   document.getElementById('no-'+fid).checked=true;
+  var btn = document.getElementById('nab-'+fid);
+  if (btn) btn.innerHTML = '<span>2 · View</span><span style="opacity:.6">&#8862;</span>';
   renderPols(); toast('Added '+em+' → Perm:'+av+' Offline:'+(offline?'on':'off'),'ok');
 }
 
@@ -682,12 +678,15 @@ function renderFilePols() {
           '<div class="ur-hd">Email</div>' +
           '<div class="ur-hd">DRM Permission</div>' +
           '<div class="ur-hd">Offline Access</div>' +
+          '<div class="ur-hd">Offline Days</div>' +
           '<div class="ur-hd">Action</div>' +
         '</div>' +
         '<div id="fur-'+fref+'"></div>' +
         '<div class="add-row">' +
           '<input placeholder="user@domain.com" id="fne-'+fref+'">' +
-          '<input placeholder="Permission (e.g. 6)" id="fna-'+fref+'" style="flex:0 0 130px">' +
+          '<input type="hidden" id="fna-'+fref+'" value="2">' +
+          '<button type="button" class="perm-btn" id="fnab-'+fref+'" style="flex:0 0 190px;display:flex;align-items:center;justify-content:space-between;" onclick="pickPerm(\'fna-'+fref+'\',\'fnab-'+fref+'\')"><span>2 · View</span><span style="opacity:.6">&#8862;</span></button>' +
+          '<input type="number" min="0" placeholder="Days ∞" id="fnd-'+fref+'" style="flex:0 0 90px;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:7px 6px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;text-align:center;">' +
           '<div class="add-row-offline">' +
             '<div class="toggle"><input type="checkbox" id="fno-'+fref+'" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></div>' +
             'Offline' +
@@ -726,28 +725,21 @@ function renderFileUsers(fref) {
       emailDiv.textContent = em;
 
       var permDiv = document.createElement('div');
-      permDiv.style.cssText = 'display:flex;align-items:center;gap:6px;';
-      var permInput = document.createElement('input');
-      permInput.type = 'number';
-      permInput.min = '0';
-      permInput.value = entry.acl;
-      permInput.title = drmDescribe(entry.acl);
-      permInput.style.cssText = 'width:80px;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:4px 8px;color:var(--pri3);font-family:var(--mono);font-size:12px;outline:none;-moz-appearance:textfield;';
-      permInput.addEventListener('change', function() {
-        if (typeof S.fileRules[fr][em] === 'object') S.fileRules[fr][em].acl = parseInt(this.value)||0;
-        else S.fileRules[fr][em] = { acl: parseInt(this.value)||0, offline: S.offline };
-        this.title = drmDescribe(parseInt(this.value)||0);
+      var permBtn = document.createElement('button');
+      permBtn.type = 'button';
+      permBtn.className = 'perm-btn';
+      permBtn.title = 'Open DRM Rights Calculator';
+      permBtn.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:5px 10px;color:var(--pri3);font-family:var(--mono);font-size:12px;cursor:pointer;';
+      permBtn.innerHTML = '<span>'+entry.acl+' · '+drmDescribe(entry.acl)+'</span><span style="opacity:.6">&#8862;</span>';
+      permBtn.addEventListener('click', function() {
+        openDrmCalc(getFileAcl(fr, em).acl, function(newVal) {
+          if (typeof S.fileRules[fr][em] === 'object') S.fileRules[fr][em].acl = newVal;
+          else S.fileRules[fr][em] = { acl: newVal, offline: S.offline };
+          renderFileUsers(fr);
+          toast('DRM permission updated to ' + newVal + ' (' + drmDescribe(newVal) + ')','ok');
+        });
       });
-      permInput.addEventListener('focus', function() { this.style.borderColor='var(--pri)'; });
-      permInput.addEventListener('blur',  function() { this.style.borderColor='var(--line2)'; });
-      var calcBtn = document.createElement('button');
-      calcBtn.className = 'perm-btn';
-      calcBtn.title = 'DRM Rights Calculator';
-      calcBtn.innerHTML = '&#8862;';
-      calcBtn.style.cssText = 'padding:3px 7px;font-size:14px;';
-      calcBtn.addEventListener('click', function() { openDrmCalc(fr, em, permInput); });
-      permDiv.appendChild(permInput);
-      permDiv.appendChild(calcBtn);
+      permDiv.appendChild(permBtn);
 
       var offDiv = document.createElement('div');
       offDiv.className = 'ur-offline';
@@ -771,6 +763,24 @@ function renderFileUsers(fref) {
       toggleWrap.appendChild(cb); toggleWrap.appendChild(track); toggleWrap.appendChild(thumb);
       offDiv.appendChild(toggleWrap); offDiv.appendChild(lbl);
 
+      var daysDiv = document.createElement('div');
+      var daysInput = document.createElement('input');
+      daysInput.type = 'number';
+      daysInput.min = '0';
+      daysInput.placeholder = '∞';
+      daysInput.title = 'Days of offline access before it expires (blank = unlimited)';
+      daysInput.value = (entry.offlineDays !== undefined && entry.offlineDays !== null) ? entry.offlineDays : '';
+      daysInput.style.cssText = 'width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:3px;padding:5px 6px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;text-align:center;';
+      daysInput.addEventListener('change', function() {
+        if (typeof S.fileRules[fr][em] !== 'object') {
+          S.fileRules[fr][em] = { acl: parseInt(S.fileRules[fr][em])||0, offline: false };
+        }
+        var v = this.value.trim();
+        if (v === '') delete S.fileRules[fr][em].offlineDays;
+        else S.fileRules[fr][em].offlineDays = parseInt(v)||0;
+      });
+      daysDiv.appendChild(daysInput);
+
       var actDiv = document.createElement('div');
       var delBtn = document.createElement('button');
       delBtn.className = 'btn btn-red';
@@ -780,7 +790,7 @@ function renderFileUsers(fref) {
       actDiv.appendChild(delBtn);
 
       row.appendChild(emailDiv); row.appendChild(permDiv);
-      row.appendChild(offDiv);   row.appendChild(actDiv);
+      row.appendChild(offDiv);   row.appendChild(daysDiv); row.appendChild(actDiv);
       el.appendChild(row);
     })(fref, email);
   }
@@ -788,14 +798,19 @@ function renderFileUsers(fref) {
 
 function addFileUser(fref) {
   var em = document.getElementById('fne-'+fref).value.trim().toLowerCase();
-  var av = parseInt(document.getElementById('fna-'+fref).value.trim());
+  var av = parseInt(document.getElementById('fna-'+fref).value) || 0;
   var offline = document.getElementById('fno-'+fref).checked;
+  var daysRaw = document.getElementById('fnd-'+fref).value.trim();
   if (!em.includes('@')) return toast('Enter a valid email','warn');
-  if (isNaN(av)) return toast('Enter a numeric ACL value','warn');
-  S.fileRules[fref][em] = { acl: av, offline: offline };
+  var entry = { acl: av, offline: offline };
+  if (daysRaw !== '') entry.offlineDays = parseInt(daysRaw)||0;
+  S.fileRules[fref][em] = entry;
   document.getElementById('fne-'+fref).value='';
-  document.getElementById('fna-'+fref).value='';
+  document.getElementById('fna-'+fref).value='2';
+  document.getElementById('fnd-'+fref).value='';
   document.getElementById('fno-'+fref).checked=true;
+  var btn = document.getElementById('fnab-'+fref);
+  if (btn) btn.innerHTML = '<span>2 · View</span><span style="opacity:.6">&#8862;</span>';
   renderFilePols(); toast('Added '+em+' → Perm:'+av,'ok');
 }
 
@@ -824,27 +839,19 @@ function loadWm() {
   document.getElementById('wm-bold').checked=S.wm.font.bold;
   document.getElementById('wm-ital').checked=S.wm.font.italic;
   document.getElementById('wm-msg').value=S.noAccess||'';
-  document.getElementById('wm-offline').checked=S.offline;
   wmSync();
 }
 function wmSync() {
   var lines=[document.getElementById('wm0').value||'$USERNAME$ $USEREMAIL$',document.getElementById('wm1').value||'',document.getElementById('wm2').value||''];
-  var col='#'+(document.getElementById('wm-col').value||'C8C8C8');
   var bold=document.getElementById('wm-bold').checked;
   var ital=document.getElementById('wm-ital').checked;
   var face=document.getElementById('wm-face').value||'Arial';
-  var prev=document.getElementById('wm-prev');
-  prev.style.color=col; prev.style.fontFamily=face;
-  prev.style.fontWeight=bold?'bold':'normal'; prev.style.fontStyle=ital?'italic':'normal';
-  prev.innerHTML=lines.map(function(l){return l||'&nbsp;';}).join('<br>');
-  var doc=document.getElementById('wm-doc');
-  doc.style.color=col; doc.style.fontFamily=face;
-  doc.style.fontWeight=bold?'bold':'normal'; doc.style.fontStyle=ital?'italic':'normal';
-  doc.innerHTML=lines.filter(function(l){return l;}).join('<br>');
   S.wm.lines=lines; S.wm.font.face=face; S.wm.font.bold=bold; S.wm.font.italic=ital;
   S.wm.color=document.getElementById('wm-col').value;
   S.noAccess=document.getElementById('wm-msg').value;
-  S.offline=document.getElementById('wm-offline').checked;
+  // S.offline remains an internal default (used as a fallback for legacy numeric-only
+  // ACL entries); offline access is now controlled per-user/per-entry only, so there's
+  // no global toggle exposed in the UI anymore.
 }
 
 // ── Shared config load/save (Netlify Blobs, via /api/config) ───────────────
@@ -1161,8 +1168,12 @@ function calcDrmValue() {
   if (desc) desc.textContent = drmDescribe(result);
 }
 
-function openDrmCalc(fid, email, inputEl) {
-  var current = parseInt(inputEl.value) || 0;
+// Generic DRM Rights Calculator — pass the current value and a callback that
+// receives the newly-selected value on Apply. Decoupled from any specific
+// input/entry so it can drive both "edit an existing row" and "pick a value
+// for a not-yet-added row" flows identically.
+function openDrmCalc(current, onApply) {
+  current = parseInt(current) || 0;
 
   // Remove any existing modal
   var old = document.getElementById('drm-modal-overlay');
@@ -1236,11 +1247,8 @@ function openDrmCalc(fid, email, inputEl) {
   applyBtn.textContent = 'Apply';
   applyBtn.addEventListener('click', function() {
     var newVal = parseInt(document.getElementById('drm-calc-result').textContent) || 0;
-    inputEl.value = newVal;
-    inputEl.title = drmDescribe(newVal);
-    updateAcl(fid, email, newVal);
     overlay.remove();
-    toast('DRM permission updated to ' + newVal + ' (' + drmDescribe(newVal) + ')','ok');
+    onApply(newVal);
   });
   foot.appendChild(cancelBtn);
   foot.appendChild(applyBtn);
@@ -1253,6 +1261,19 @@ function openDrmCalc(fid, email, inputEl) {
 
   // Click outside to close
   overlay.addEventListener('click', function() { overlay.remove(); });
+}
+
+// Used by the "add new user" rows (Folder + File Policies), where there's no
+// existing entry yet to update — just a pending value held in a hidden input
+// until "+ Add" is clicked.
+function pickPerm(hiddenId, btnId) {
+  var hidden = document.getElementById(hiddenId);
+  var btn = document.getElementById(btnId);
+  var current = parseInt(hidden.value) || 0;
+  openDrmCalc(current, function(newVal) {
+    hidden.value = newVal;
+    btn.textContent = newVal + ' · ' + drmDescribe(newVal);
+  });
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────

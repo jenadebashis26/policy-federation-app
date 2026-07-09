@@ -68,6 +68,7 @@ exports.handler = async (event) => {
   let matchFound = false;
   let primaryAccessRight = 0;
   let offlineAccessRight = globalOffline;
+  let offlineDays; // undefined = unlimited offline access, per-entry override only
 
   if (hit) {
     const entry = hit.entry;
@@ -77,7 +78,20 @@ exports.handler = async (event) => {
       matchFound = true;
       const perUserOffline = typeof entry === 'object' ? entry.offline : undefined;
       offlineAccessRight = perUserOffline !== undefined ? perUserOffline : globalOffline;
+      if (typeof entry === 'object' && entry.offlineDays !== undefined && entry.offlineDays !== null) {
+        const d = Number(entry.offlineDays);
+        if (!isNaN(d) && d >= 0) offlineDays = d;
+      }
     }
+  }
+
+  // date-embargo/end-time per policy-federation-api.md: UTC, yyyy-MM-dd'T'HH:mm:ss.SSSZZZ:ZZ,
+  // empty = no expiry. Only set when offline access is actually granted and a duration
+  // was configured for the matched entry — otherwise offline access is unlimited.
+  let embargoEndTime = '';
+  if (offlineAccessRight && offlineDays !== undefined) {
+    const end = new Date(Date.now() + offlineDays * 24 * 60 * 60 * 1000);
+    embargoEndTime = end.toISOString().replace(/Z$/, '+00:00');
   }
 
   const watermarkXml = `
@@ -132,7 +146,7 @@ exports.handler = async (event) => {
             <primary-access-right>${primaryAccessRight}</primary-access-right>
             <offline-access-right>${offlineAccessRight ? 'true' : 'false'}</offline-access-right>
             <date-embargo>
-                <end-time></end-time>
+                <end-time>${embargoEndTime}</end-time>
             </date-embargo>
         </ara-access-right-details>${displayMessageBlock}
 ${watermarkXml}
@@ -151,6 +165,8 @@ ${classificationBlock}
     acl: primaryAccessRight,
     grant: matchFound,
     offline: offlineAccessRight,
+    offlineDays: offlineDays !== undefined ? offlineDays : null,
+    embargoEndTime: embargoEndTime || null,
     reqXml: rawXml,
     respXml: responseXml
   });
