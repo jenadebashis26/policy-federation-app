@@ -933,7 +933,9 @@ function setApiStatus(state) {
 function saveConfig() {
   S.cfg.key=document.getElementById('cfg-key').value.trim();
   if (!S.cfg.key) return toast('Enter the team API key first','warn');
+  try { localStorage.setItem('pfc-api-key', S.cfg.key); } catch(e) {}
   startPolling();
+  loadConfigFromFile();
   toast('Config saved — polling started','ok');
 }
 
@@ -1257,7 +1259,15 @@ function openDrmCalc(fid, email, inputEl) {
 // ── Boot ──────────────────────────────────────────────────────────────────
 renderPols();
 loadWm();
+try {
+  var savedKey = localStorage.getItem('pfc-api-key');
+  if (savedKey) {
+    S.cfg.key = savedKey;
+    document.getElementById('cfg-key').value = savedKey;
+  }
+} catch(e) {}
 setTimeout(loadConfigFromFile, 800);
+if (S.cfg.key) startPolling();
 </script>
 </body>
 </html>
