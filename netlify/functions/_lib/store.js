@@ -10,12 +10,24 @@ const CONFIG_KEY = 'config.json';
 const LOG_KEY = 'log.json';
 const MAX_LOG_ENTRIES = 50;
 
+// getStore() is supposed to auto-detect the site/token when running inside a Netlify
+// Function, but that auto-detection doesn't always kick in (seen in practice with
+// classic exports.handler-style functions). Falling back to explicit siteID/token from
+// env vars, per Netlify's own documented manual-configuration path, makes this work
+// regardless. NETLIFY_BLOBS_SITE_ID / NETLIFY_BLOBS_TOKEN are set on the Netlify site
+// (not auto-provided) — see README for how to get them.
+function manualOpts() {
+  const siteID = process.env.NETLIFY_BLOBS_SITE_ID;
+  const token = process.env.NETLIFY_BLOBS_TOKEN;
+  return siteID && token ? { siteID, token } : {};
+}
+
 function configStore() {
-  return getStore('policy-federation-config');
+  return getStore(Object.assign({ name: 'policy-federation-config' }, manualOpts()));
 }
 
 function logStore() {
-  return getStore('policy-federation-log');
+  return getStore(Object.assign({ name: 'policy-federation-log' }, manualOpts()));
 }
 
 const DEFAULT_CONFIG = {
