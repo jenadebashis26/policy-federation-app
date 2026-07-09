@@ -1,0 +1,28 @@
+[build]
+  functions = "netlify/functions"
+  publish = "public"
+
+[[redirects]]
+  from = "/ping"
+  to = "/.netlify/functions/ping"
+  status = 200
+
+[[redirects]]
+  from = "/getaccessright"
+  to = "/.netlify/functions/getaccessright"
+  status = 200
+
+[[redirects]]
+  from = "/getfileinformation"
+  to = "/.netlify/functions/getfileinformation"
+  status = 200
+
+[[redirects]]
+  from = "/api/config"
+  to = "/.netlify/functions/config"
+  status = 200
+
+[[redirects]]
+  from = "/api/log"
+  to = "/.netlify/functions/log"
+  status = 200
