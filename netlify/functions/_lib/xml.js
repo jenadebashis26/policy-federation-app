@@ -7,7 +7,16 @@
 
 const { XMLParser } = require('fast-xml-parser');
 
-const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
+// parseTagValue/parseAttributeValue default to true in fast-xml-parser, which silently
+// converts numeric-looking text (e.g. a hot-folder ext-id of "00001937") into a JS number
+// and drops leading zeros. Ext-ids and rep-codes need to stay exact strings, so both are
+// disabled here.
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: '',
+  parseTagValue: false,
+  parseAttributeValue: false
+});
 
 function parseXml(rawXml) {
   try {
