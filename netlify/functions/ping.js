@@ -4,6 +4,7 @@
 // which protocol version and services it supports.
 
 const { extractRequestId } = require('./_lib/xml');
+const { appendLog } = require('./_lib/store');
 
 exports.handler = async (event) => {
   const rawXml = event.body || '';
@@ -27,6 +28,26 @@ exports.handler = async (event) => {
         </ara-supported-services>
     </ara-response-details-ping>
 </ara-response-ping>`;
+
+  // Log the ping for the Live Monitor. Never let a logging failure break the Ping
+  // response itself — Policy Server uses it to decide whether the ARA is up.
+  try {
+    await appendLog({
+      ts: new Date().toISOString(),
+      endpoint: 'ping',
+      email: '—',
+      folder: '—',
+      fileExtId: '—',
+      matchedScope: '',
+      acl: '—',
+      grant: true,
+      offline: null,
+      reqXml: rawXml,
+      respXml: responseXml
+    });
+  } catch (e) {
+    console.error('ping: failed to write log entry', e && e.message);
+  }
 
   return {
     statusCode: 200,

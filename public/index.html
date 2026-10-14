@@ -998,7 +998,7 @@ function entryFromLog(e) {
 }
 
 function verdictBadge(e) {
-  if (e.endpoint==='getfileinformation') return '<span class="badge b-info">ℹ INFO</span>';
+  if (e.endpoint==='getfileinformation'||e.endpoint==='ping') return '<span class="badge b-info">ℹ INFO</span>';
   return '<span class="'+(e.grant?'badge b-grant':'badge b-deny')+'">'+(e.grant?'✓ GRANT':'✕ DENY')+'</span>';
 }
 function offlineLabel(e) {
@@ -1009,7 +1009,7 @@ function offlineColor(e) {
 }
 
 function addEntry(e) {
-  S.log.unshift(e); S.execCount++; if(e.endpoint!=='getfileinformation'&&!e.grant) S.denyCount++;
+  S.log.unshift(e); S.execCount++; if(e.endpoint!=='getfileinformation'&&e.endpoint!=='ping'&&!e.grant) S.denyCount++;
   document.getElementById('s-exec').textContent=S.execCount;
   document.getElementById('s-deny').textContent=S.denyCount;
   var log=document.getElementById('mon-log');
